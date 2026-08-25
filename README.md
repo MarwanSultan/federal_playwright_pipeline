@@ -108,6 +108,10 @@ Do not disclose suspected vulnerabilities in public issues. Use the owning organ
 
 Before enabling concrete security tests, obtain the target URL/API contract, identity provider and MFA behavior, roles/resources, five critical workflows, audit-event contract, security headers/cookies/CORS/CSP expectations, data classification, authorized environments, and evidence-retention requirements. Then replace placeholders with source-anchored tests, synthetic users/resources, and updated traceability records.
 
+## Author
+
+Marwan Sultan
+
 ## References
 
 - [FedRAMP](https://www.fedramp.gov/)
