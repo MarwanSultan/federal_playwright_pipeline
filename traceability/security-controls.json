@@ -1,0 +1,178 @@
+[
+  {
+    "id": "AC-AUTHZ-001",
+    "controlFamily": "AC",
+    "objective": "Enforce least privilege and deny unauthorized access",
+    "requirement": "Application role and resource authorization contract must be supplied before execution",
+    "testId": "SEC-AUTHZ-001",
+    "automation": "tests/security/authorization.spec.ts (onboarding template)",
+    "ciStage": "security-validation",
+    "evidence": "JUnit result, sanitized trace, redacted API response",
+    "status": "partially implemented"
+  },
+  {
+    "id": "AU-EVIDENCE-001",
+    "controlFamily": "AU",
+    "objective": "Produce attributable, reviewable test evidence",
+    "requirement": "Every executed test has an ID, timestamp, environment, result, and safe artifact reference",
+    "testId": "EVID-001",
+    "automation": "src/evidence/redact.ts and Playwright reporters",
+    "ciStage": "evidence",
+    "evidence": "JUnit/XML, HTML report, sanitized traces and screenshots",
+    "status": "implemented"
+  },
+  {
+    "id": "IA-SECRET-001",
+    "controlFamily": "IA",
+    "objective": "Protect authentication secrets and session material",
+    "requirement": "No credentials, tokens, cookies, or production PII in repository or artifacts",
+    "testId": "EVID-002",
+    "automation": "Redaction tests and secret scanning in CI",
+    "ciStage": "security",
+    "evidence": "Scan result and redaction test result",
+    "status": "partially implemented"
+  },
+  {
+    "id": "SI-SCA-001",
+    "controlFamily": "SI/SR",
+    "objective": "Identify vulnerable dependencies and supply-chain risks",
+    "requirement": "Pinned dependencies and vulnerability scanning are required for changes",
+    "testId": "SCA-001",
+    "automation": "npm audit and approved SAST/SCA tools in CI",
+    "ciStage": "security",
+    "evidence": "Machine-readable scan report",
+    "status": "partially implemented"
+  },
+  {
+    "id": "SEC-API-HEADERS-001",
+    "controlFamily": "SC/SI",
+    "objective": "Ensure API responses enforce approved transport and browser security policy",
+    "requirement": "Approved API security headers must be present on the configured response",
+    "testId": "SEC-API-001",
+    "automation": "tests/api/security-regression.spec.ts",
+    "ciStage": "security-validation",
+    "evidence": "Status, approved header assertions, and sanitized Playwright result",
+    "status": "partially implemented"
+  },
+  {
+    "id": "SEC-AUTHN-API-001",
+    "controlFamily": "IA",
+    "objective": "Prevent unauthenticated API access",
+    "requirement": "Protected API resources reject requests without authentication",
+    "testId": "SEC-AUTHN-001",
+    "automation": "tests/api/security-regression.spec.ts",
+    "ciStage": "security-validation",
+    "evidence": "Safe response status and sanitized Playwright result",
+    "status": "partially implemented"
+  },
+  {
+    "id": "SEC-AUTHZ-API-001",
+    "controlFamily": "AC",
+    "objective": "Enforce least privilege at API boundaries",
+    "requirement": "A configured forbidden role cannot access the protected resource",
+    "testId": "SEC-AUTHZ-002",
+    "automation": "tests/api/security-regression.spec.ts",
+    "ciStage": "security-validation",
+    "evidence": "Safe response status and sanitized Playwright result",
+    "status": "partially implemented"
+  },
+  {
+    "id": "SEC-INPUT-API-001",
+    "controlFamily": "SI",
+    "objective": "Reject malformed API input safely",
+    "requirement": "Approved malformed input returns the contract validation status without a server error",
+    "testId": "SEC-INPUT-001",
+    "automation": "tests/api/security-regression.spec.ts",
+    "ciStage": "security-validation",
+    "evidence": "Safe response status and sanitized Playwright result",
+    "status": "partially implemented"
+  },
+  {
+    "id": "SEC-API-METHOD-001",
+    "controlFamily": "SC",
+    "objective": "Limit API operations to the approved method contract",
+    "requirement": "An unsupported HTTP method is rejected with the approved status",
+    "testId": "SEC-API-002",
+    "automation": "tests/api/security-regression.spec.ts",
+    "ciStage": "security-validation",
+    "evidence": "Safe response status and sanitized Playwright result",
+    "status": "partially implemented"
+  },
+  {
+    "id": "SEC-AUDIT-API-001",
+    "controlFamily": "AU",
+    "objective": "Preserve required API audit event fields",
+    "requirement": "The approved audit response contains the required attributable event fields",
+    "testId": "SEC-AUDIT-001",
+    "automation": "tests/api/security-regression.spec.ts",
+    "ciStage": "security-validation",
+    "evidence": "Required-field assertions and sanitized Playwright result",
+    "status": "partially implemented"
+  },
+  {
+    "id": "CA-BOUNDARY-001",
+    "controlFamily": "CA",
+    "objective": "Maintain clear assessment and authorization boundaries",
+    "requirement": "Automation evidence does not establish FedRAMP certification or agency ATO",
+    "testId": "MANUAL-001",
+    "automation": "Architecture review and documented status",
+    "ciStage": "release-gate",
+    "evidence": "Signed review record and control matrix",
+    "status": "independent assessment required"
+  },
+  {
+    "id": "MCF-AUTH-001",
+    "controlFamily": "IA",
+    "objective": "Preserve access to the mission-critical application for approved users",
+    "requirement": "Approved synthetic user can complete the application authentication workflow",
+    "testId": "MCF-001",
+    "automation": "tests/critical/mission-critical.spec.ts",
+    "ciStage": "functional-tests",
+    "evidence": "Sanitized Playwright result, trace on failure, and screenshot on failure",
+    "status": "partially implemented"
+  },
+  {
+    "id": "MCF-PRIMARY-001",
+    "controlFamily": "CA/SI",
+    "objective": "Verify the primary mission-critical user journey",
+    "requirement": "Application owner supplies the approved journey path and synthetic completion marker",
+    "testId": "MCF-002",
+    "automation": "tests/critical/mission-critical.spec.ts",
+    "ciStage": "functional-tests",
+    "evidence": "Sanitized Playwright result, trace on failure, and screenshot on failure",
+    "status": "partially implemented"
+  },
+  {
+    "id": "MCF-SUBMIT-001",
+    "controlFamily": "SI",
+    "objective": "Protect completion of the critical business transaction",
+    "requirement": "Approved synthetic transaction reaches its documented confirmation state",
+    "testId": "MCF-003",
+    "automation": "tests/critical/mission-critical.spec.ts",
+    "ciStage": "functional-tests",
+    "evidence": "Sanitized Playwright result, trace on failure, and screenshot on failure",
+    "status": "partially implemented"
+  },
+  {
+    "id": "MCF-AUTHZ-001",
+    "controlFamily": "AC",
+    "objective": "Prevent unauthorized access within the mission-critical workflow",
+    "requirement": "Application owner supplies approved role boundary and expected authorized marker",
+    "testId": "MCF-004",
+    "automation": "tests/critical/mission-critical.spec.ts and authorization helpers",
+    "ciStage": "security-validation",
+    "evidence": "Role-aware result, redacted response, and trace on failure",
+    "status": "partially implemented"
+  },
+  {
+    "id": "MCF-AUDIT-001",
+    "controlFamily": "AU",
+    "objective": "Maintain session completion and auditability of the critical workflow",
+    "requirement": "Application exposes an approved completion/audit confirmation marker",
+    "testId": "MCF-005",
+    "automation": "tests/critical/mission-critical.spec.ts",
+    "ciStage": "security-validation",
+    "evidence": "Safe audit confirmation, timestamps, and sanitized trace",
+    "status": "partially implemented"
+  }
+]

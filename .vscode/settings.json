@@ -1,0 +1,4 @@
+{
+  "emmet.useInlineCompletions": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": true
+}

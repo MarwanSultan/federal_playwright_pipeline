@@ -1,0 +1,36 @@
+{
+  "name": "playwright_pipeline",
+  "version": "1.0.0",
+  "description": "Auditable, security-focused Playwright automation platform",
+  "scripts": {
+    "format:check": "prettier --check \"**/*.{ts,mjs,json,yml,yaml}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "traceability:validate": "node scripts/validate-traceability.cjs",
+    "test": "playwright test",
+    "test:smoke": "playwright test --project=chromium --grep @smoke",
+    "test:security": "playwright test tests/security",
+    "test:critical": "playwright test tests/critical",
+    "test:report": "playwright show-report",
+    "install:browsers": "playwright install chromium",
+    "docker:build": "docker compose build framework",
+    "docker:validate": "docker compose run --rm validate",
+    "docker:test": "docker compose run --rm framework",
+    "docker:security": "docker compose run --rm security-tests",
+    "docker:pipeline": "npm run docker:build && npm run docker:validate && npm run docker:test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@types/node": "26.3.0",
+    "@typescript-eslint/eslint-plugin": "8.40.0",
+    "@typescript-eslint/parser": "8.40.0",
+    "eslint": "9.34.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.40.0"
+  }
+}

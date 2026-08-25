@@ -1,0 +1,51 @@
+services:
+  framework:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: playwright-pipeline:${PIPELINE_IMAGE_TAG:-local}
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    environment:
+      CI: 'true'
+      BASE_URL: ${BASE_URL:-}
+      API_BASE_URL: ${API_BASE_URL:-}
+      ENVIRONMENT_CLASSIFICATION: ${ENVIRONMENT_CLASSIFICATION:-non-production}
+      ENABLE_CROSS_BROWSER: ${ENABLE_CROSS_BROWSER:-false}
+      AUTHZ_CONTRACT_READY: ${AUTHZ_CONTRACT_READY:-}
+      CRITICAL_WORKFLOWS_READY: ${CRITICAL_WORKFLOWS_READY:-false}
+      CRITICAL_AUTH_PATH: ${CRITICAL_AUTH_PATH:-}
+      CRITICAL_AUTH_MARKER: ${CRITICAL_AUTH_MARKER:-}
+      CRITICAL_PRIMARY_PATH: ${CRITICAL_PRIMARY_PATH:-}
+      CRITICAL_PRIMARY_MARKER: ${CRITICAL_PRIMARY_MARKER:-}
+      CRITICAL_SUBMISSION_PATH: ${CRITICAL_SUBMISSION_PATH:-}
+      CRITICAL_SUBMISSION_MARKER: ${CRITICAL_SUBMISSION_MARKER:-}
+      CRITICAL_AUTHZ_PATH: ${CRITICAL_AUTHZ_PATH:-}
+      CRITICAL_AUTHZ_MARKER: ${CRITICAL_AUTHZ_MARKER:-}
+      CRITICAL_AUDIT_PATH: ${CRITICAL_AUDIT_PATH:-}
+      CRITICAL_AUDIT_MARKER: ${CRITICAL_AUDIT_MARKER:-}
+    volumes:
+      - ./playwright-report:/work/playwright-report
+      - ./test-results:/work/test-results
+    command: npm test
+
+  validate:
+    extends:
+      service: framework
+    command: sh -c 'npm run format:check && npm run lint && npm run typecheck && npm run traceability:validate'
+
+  security-tests:
+    extends:
+      service: framework
+    command: npm run test:security
+
+  critical-tests:
+    extends:
+      service: framework
+    command: npm run test:critical

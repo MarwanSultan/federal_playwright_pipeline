@@ -1,0 +1,59 @@
+
+# Dependencies and package-manager state
+node_modules/
+.npm/
+.pnpm-store/
+yarn-error.log*
+pnpm-debug.log*
+npm-debug.log*
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Playwright and test evidence
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/evidence/
+/coverage/
+
+# Build output and tool caches
+/dist/
+/build/
+/out/
+/.cache/
+/.turbo/
+/.docker-buildx-cache/
+
+# Logs, dumps, and temporary files
+*.log
+*.log.*
+*.pid
+*.pid.lock
+*.seed
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Operating-system metadata
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE and local workspace state
+.idea/
+.history/
+.fleet/
+*.code-workspace

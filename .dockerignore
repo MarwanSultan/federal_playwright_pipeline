@@ -1,0 +1,13 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+node_modules
+playwright-report
+test-results
+evidence
+coverage
+Dockerfile
+docker-compose.yml
+*.log
