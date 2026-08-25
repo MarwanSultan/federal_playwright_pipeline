@@ -1,7 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
+import os from 'node:os';
+import path from 'node:path';
 
 const targetUrl = process.env.BASE_URL ?? 'https://www.fedramp.gov';
 const isCi = Boolean(process.env.CI);
+const ciOutputRoot = path.join(os.tmpdir(), 'playwright-pipeline');
+const reportDirectory = isCi ? path.join(ciOutputRoot, 'playwright-report') : 'playwright-report';
+const resultsDirectory = isCi ? path.join(ciOutputRoot, 'test-results') : 'test-results';
 
 /**
  * Read environment variables from file.
@@ -16,6 +21,7 @@ const isCi = Boolean(process.env.CI);
  */
 export default defineConfig({
   testDir: './tests',
+  outputDir: resultsDirectory,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -27,8 +33,8 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['list'],
-    ['html', { outputFolder: 'playwright-report', open: 'never' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['html', { outputFolder: reportDirectory, open: 'never' }],
+    ['junit', { outputFile: `${resultsDirectory}/junit.xml` }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

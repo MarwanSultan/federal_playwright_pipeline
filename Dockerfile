@@ -5,7 +5,7 @@ ENV CI=true \
     NODE_ENV=test \
     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
-WORKDIR /work
+WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
@@ -22,4 +22,4 @@ RUN mkdir -p /work/playwright-report /work/test-results \
 
 USER pwuser
 
-ENTRYPOINT ["npm", "test"]
+CMD ["npm", "test"]

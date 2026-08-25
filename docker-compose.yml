@@ -33,7 +33,11 @@ services:
     volumes:
       - ./playwright-report:/work/playwright-report
       - ./test-results:/work/test-results
-    command: npm test
+    command: >-
+      sh -c 'npm test; exit_code=$$?;
+      cp -R /tmp/playwright-pipeline/playwright-report/. /work/playwright-report/ 2>/dev/null || true;
+      cp -R /tmp/playwright-pipeline/test-results/. /work/test-results/ 2>/dev/null || true;
+      exit "$$exit_code"'
 
   validate:
     extends:

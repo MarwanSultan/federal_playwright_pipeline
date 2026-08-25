@@ -71,12 +71,12 @@ jobs:
           persist-credentials: false
 
       - name: CodeQL initialization
-        uses: github/codeql-action/init@6d786de4d6f3531a740e445b53a42b622bbbace8 # v3
+        uses: github/codeql-action/init@42947a340483f03ba47bb1a039b2c519aab3df85 # v3
         with:
           languages: javascript-typescript
 
       - name: CodeQL analysis
-        uses: github/codeql-action/analyze@6d786de4d6f3531a740e445b53a42b622bbbace8 # v3
+        uses: github/codeql-action/analyze@42947a340483f03ba47bb1a039b2c519aab3df85 # v3
         with:
           category: /language:javascript-typescript
 
