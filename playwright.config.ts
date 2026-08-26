@@ -2,70 +2,144 @@ import { defineConfig, devices } from '@playwright/test';
 import os from 'node:os';
 import path from 'node:path';
 
-const targetUrl = process.env.BASE_URL ?? 'https://www.fedramp.gov';
-const isCi = Boolean(process.env.CI);
-const ciOutputRoot = path.join(os.tmpdir(), 'playwright-pipeline');
-const reportDirectory = isCi ? path.join(ciOutputRoot, 'playwright-report') : 'playwright-report';
-const resultsDirectory = isCi ? path.join(ciOutputRoot, 'test-results') : 'test-results';
+const targetUrl = process.env.BASE_URL?.trim() || 'https://www.fedramp.gov';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+const isCi = Boolean(process.env.CI);
+
+const ciOutputRoot = path.join(os.tmpdir(), 'playwright-pipeline');
+
+const reportDirectory = isCi ? path.join(ciOutputRoot, 'playwright-report') : 'playwright-report';
+
+const resultsDirectory = isCi ? path.join(ciOutputRoot, 'test-results') : 'test-results';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   testDir: './tests',
+
   outputDir: resultsDirectory,
-  /* Run tests in files in parallel */
+
+  /**
+   * Run tests in files in parallel.
+   */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
+
+  /**
+   * Fail the build on CI if test.only is accidentally committed.
+   */
+  forbidOnly: isCi,
+
+  /**
+   * Retry failed tests on CI.
+   */
   retries: isCi ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
+
+  /**
+   * Use a single worker on CI for predictable execution.
+   */
   workers: isCi ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+
+  /**
+   * Reporters.
+   */
   reporter: [
     ['list'],
-    ['html', { outputFolder: reportDirectory, open: 'never' }],
-    ['junit', { outputFile: `${resultsDirectory}/junit.xml` }],
+    [
+      'html',
+      {
+        outputFolder: reportDirectory,
+        open: 'never',
+      },
+    ],
+    [
+      'junit',
+      {
+        outputFile: `${resultsDirectory}/junit.xml`,
+      },
+    ],
   ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
+  /**
+   * Shared settings for all projects.
+   */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    headless: true,
+    /**
+     * Base URL used by relative navigation such as:
+     *
+     * await page.goto('/events');
+     *
+     * BASE_URL can override the default environment.
+     */
     baseURL: targetUrl,
+
+    /**
+     * Run browsers headlessly.
+     */
+    headless: true,
+
+    /**
+     * Navigation timeout.
+     */
     navigationTimeout: 30_000,
+
+    /**
+     * Action timeout.
+     */
     actionTimeout: 15_000,
+
+    /**
+     * Do not ignore HTTPS certificate errors.
+     */
     ignoreHTTPSErrors: false,
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    /**
+     * Collect traces when tests fail after a retry.
+     */
     trace: isCi ? 'retain-on-failure' : 'on-first-retry',
+
+    /**
+     * Capture screenshots only when tests fail.
+     */
     screenshot: 'only-on-failure',
+
+    /**
+     * Disable video recording to reduce artifact size.
+     */
     video: 'off',
   },
 
-  /* Configure projects for major browsers */
+  /**
+   * Configure supported browsers.
+   */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
 
     ...(process.env.ENABLE_CROSS_BROWSER === 'true'
       ? [
-          { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-          { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+          {
+            name: 'firefox',
+            use: {
+              ...devices['Desktop Firefox'],
+            },
+          },
+          {
+            name: 'webkit',
+            use: {
+              ...devices['Desktop Safari'],
+            },
+          },
         ]
       : []),
 
-    /* Test against mobile viewports. */
+    /**
+     * Mobile projects can be enabled when required.
+     */
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
@@ -75,21 +149,31 @@ export default defineConfig({
     //   use: { ...devices['iPhone 12'] },
     // },
 
-    /* Test against branded browsers. */
+    /**
+     * Branded browser projects can be enabled when required.
+     */
     // {
     //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    //   use: {
+    //     ...devices['Desktop Edge'],
+    //     channel: 'msedge',
+    //   },
     // },
     // {
     //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     channel: 'chrome',
+    //   },
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
+  /**
+   * Run a local development server before tests when required.
+   */
   // webServer: {
   //   command: 'npm run start',
   //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
+  //   reuseExistingServer: !isCi,
   // },
 });

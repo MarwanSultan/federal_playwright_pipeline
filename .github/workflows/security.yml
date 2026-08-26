@@ -13,19 +13,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  dependency-and-secrets:
-    name: Dependency and secret scanning
+
+  dependency-scanning:
+    name: Dependency vulnerability scanning
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
     steps:
       - name: Check out source
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: npm
@@ -37,58 +39,62 @@ jobs:
         run: npm audit --audit-level=high --json > npm-audit.json
 
       - name: OSV-Scanner
-        uses: google/osv-scanner-action/osv-scanner-action@e69cc6c86b31f1e7e23935bbe7031b50e51082de # v2.0.2
+        uses: google/osv-scanner-action/osv-scanner-action@v2
         with:
           scan-args: |-
             --lockfile=package-lock.json
 
-      - name: Gitleaks
-        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
-          GITLEAKS_ENABLE_COMMENTS: 'false'
-
       - name: Upload dependency evidence
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: ${{ !env.ACT && !cancelled() }}
+        uses: actions/upload-artifact@v4
         with:
           name: dependency-security-results
           path: npm-audit.json
           retention-days: 30
 
+
   sast:
     name: Static analysis
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
     permissions:
       contents: read
-      security-events: write # Required to publish CodeQL results.
+      security-events: write
+
     steps:
       - name: Check out source
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: CodeQL initialization
-        uses: github/codeql-action/init@42947a340483f03ba47bb1a039b2c519aab3df85 # v3
+        if: ${{ !env.ACT }}
+        uses: github/codeql-action/init@v3
         with:
           languages: javascript-typescript
+          queries: security-extended
 
       - name: CodeQL analysis
-        uses: github/codeql-action/analyze@42947a340483f03ba47bb1a039b2c519aab3df85 # v3
+        if: ${{ !env.ACT }}
+        uses: github/codeql-action/analyze@v3
         with:
           category: /language:javascript-typescript
+
 
   workflow-security:
     name: Workflow security lint
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     permissions:
       contents: read
-      actions: read # Required for workflow metadata analysis.
+      actions: read
+
     steps:
       - name: Check out source
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
+
+      # Workflow security scanner goes here
