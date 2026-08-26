@@ -72,6 +72,7 @@ export default defineConfig({
      * BASE_URL can override the default environment.
      */
     baseURL: targetUrl,
+    storageState: '.auth/user.json',
 
     /**
      * Run browsers headlessly.
@@ -116,6 +117,8 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
+        // IMPORTANT: Prevent setup from looking for user.json before it exists
+        storageState: { cookies: [], origins: [] },
         ...devices['Desktop Chrome'],
       },
     },

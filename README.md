@@ -6,28 +6,28 @@ Built with modern Quality Engineering, DevSecOps, and software engineering pract
 
 ## Technology
 
-* **Playwright + TypeScript** — UI and API automation
-* **Node.js + npm** — runtime and dependency management
-* **Docker** — reproducible test execution
-* **GitHub Actions** — CI/CD automation
-* **ESLint + Prettier + TypeScript** — code quality and static validation
-* **CodeQL, Semgrep, Gitleaks, OSV-Scanner, npm audit, zizmor** — security and supply-chain validation
-* **HTML/JUnit/trace artifacts** — test evidence and diagnostics
+- **Playwright + TypeScript** — UI and API automation
+- **Node.js + npm** — runtime and dependency management
+- **Docker** — reproducible test execution
+- **GitHub Actions** — CI/CD automation
+- **ESLint + Prettier + TypeScript** — code quality and static validation
+- **CodeQL, Semgrep, Gitleaks, OSV-Scanner, npm audit, zizmor** — security and supply-chain validation
+- **HTML/JUnit/trace artifacts** — test evidence and diagnostics
 
 ## Quality Engineering
 
 The framework applies:
 
-* Shift-left testing and pull-request quality gates
-* UI, API, smoke, regression, and security testing
-* Contract-driven critical workflow validation
-* Test isolation and deterministic execution
-* Reusable automation components
-* Traceability from requirements to tests and evidence
-* Containerized and reproducible execution
-* Least-privilege CI/CD permissions
-* Dependency and secret protection
-* Automated security and code-quality gates
+- Shift-left testing and pull-request quality gates
+- UI, API, smoke, regression, and security testing
+- Contract-driven critical workflow validation
+- Test isolation and deterministic execution
+- Reusable automation components
+- Traceability from requirements to tests and evidence
+- Containerized and reproducible execution
+- Least-privilege CI/CD permissions
+- Dependency and secret protection
+- Automated security and code-quality gates
 
 ## Project Structure
 
@@ -102,14 +102,14 @@ Concrete endpoints, roles, expected behavior, and test data must come from an **
 
 Security is integrated throughout the SDLC through:
 
-* SAST
-* Software composition analysis
-* Secret detection
-* GitHub Actions security analysis
-* Dependency scanning
-* Secure container execution
-* Least-privilege CI permissions
-* Artifact/evidence protection
+- SAST
+- Software composition analysis
+- Secret detection
+- GitHub Actions security analysis
+- Dependency scanning
+- Secure container execution
+- Least-privilege CI permissions
+- Artifact/evidence protection
 
 Never commit credentials, tokens, cookies, private keys, API keys, PII, or sensitive federal information.
 
