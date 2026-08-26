@@ -10,10 +10,13 @@ concurrency:
   cancel-in-progress: true
 jobs:
   validate:
+    name: Validate and run Playwright framework
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
       - name: Build framework container
         run: docker compose build --pull framework
       - name: Prepare evidence directories
@@ -28,7 +31,7 @@ jobs:
           ENABLE_CROSS_BROWSER: 'false'
         run: docker compose run --rm framework
       - name: Upload sanitized evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
