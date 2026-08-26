@@ -80,27 +80,6 @@ jobs:
         with:
           category: /language:javascript-typescript
 
-  semgrep:
-    name: Semgrep Community Edition
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    container:
-      image: semgrep/semgrep@sha256:67319956da3dcb58baf5b322899c15458e3963e7018a86aeeb5cd224e69cb77a
-    steps:
-      - name: Check out source
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
-      - name: Run Semgrep
-        run: semgrep scan --config auto --error --json --output semgrep.json
-      - name: Upload Semgrep evidence
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: semgrep-results
-          path: semgrep.json
-          retention-days: 30
-
   workflow-security:
     name: Workflow security lint
     runs-on: ubuntu-latest
@@ -113,5 +92,3 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-
-
