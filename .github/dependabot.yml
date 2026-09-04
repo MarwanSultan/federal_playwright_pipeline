@@ -1,32 +1,91 @@
 version: 2
 
 updates:
+  # ------------------------------------------------------------
   # npm dependencies
+  # ------------------------------------------------------------
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'weekly'
-    open-pull-requests-limit: 10
+      day: 'monday'
+      time: '04:00'
+      timezone: 'America/New_York'
+
+    open-pull-requests-limit: 5
+
     labels:
       - 'dependencies'
       - 'npm'
 
-  # GitHub Actions dependencies
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - 'minor'
+          - 'patch'
+
+    cooldown:
+      default-days: 3
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 3
+
+    commit-message:
+      prefix: 'deps'
+
+  # ------------------------------------------------------------
+  # GitHub Actions
+  # ------------------------------------------------------------
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
-    open-pull-requests-limit: 10
+      day: 'monday'
+      time: '04:30'
+      timezone: 'America/New_York'
+
+    open-pull-requests-limit: 3
+
     labels:
       - 'dependencies'
       - 'github-actions'
 
-  # Docker dependencies
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+
+    commit-message:
+      prefix: 'ci'
+
+  # ------------------------------------------------------------
+  # Docker
+  # ------------------------------------------------------------
   - package-ecosystem: 'docker'
     directory: '/'
     schedule:
       interval: 'weekly'
-    open-pull-requests-limit: 10
+      day: 'monday'
+      time: '05:00'
+      timezone: 'America/New_York'
+
+    open-pull-requests-limit: 3
+
     labels:
       - 'dependencies'
       - 'docker'
+
+    groups:
+      docker:
+        patterns:
+          - '*'
+
+    cooldown:
+      default-days: 3
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 3
+
+    commit-message:
+      prefix: 'docker'
+# End of Dependabot configuration.
