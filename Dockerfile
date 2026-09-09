@@ -1,5 +1,5 @@
 # Keep this aligned with @playwright/test in package.json.
-FROM mcr.microsoft.com/playwright:v1.62.1-noble AS framework
+FROM mcr.microsoft.com/playwright:v1.63.0-noble AS framework
 
 ENV CI=true \
     NODE_ENV=test
